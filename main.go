@@ -8,6 +8,7 @@ import (
 	"code.cloudfoundry.org/cli/util/configv3"
 	"flag"
 	"fmt"
+	"github.com/rabobank/scheduler-plugin/version"
 	"net/http"
 	"os"
 	"time"
@@ -74,7 +75,6 @@ var (
 //
 // Any error handling should be handled with the plugin itself (this means printing user facing errors).
 // The CLI will exit 0 if the plugin exits 0 and will exit 1 should the plugin exits nonzero.
-//
 func (c *SchedulerPlugin) Run(cliConnection plugin.CliConnection, args []string) {
 	pluginFlagSet := flag.NewFlagSet("scheduler-plugin", flag.ExitOnError)
 	pluginFlagSet.BoolVar(&FlagForce, "force", false, "exit with rc=0, even if the command fails")
@@ -131,7 +131,7 @@ func (c *SchedulerPlugin) Run(cliConnection plugin.CliConnection, args []string)
 func (c *SchedulerPlugin) GetMetadata() plugin.PluginMetadata {
 	return plugin.PluginMetadata{
 		Name:          "Scheduler",
-		Version:       plugin.VersionType{Major: 1, Minor: 0, Build: 14},
+		Version:       plugin.VersionType{Major: version.GetMajorVersion(), Minor: version.GetMinorVersion(), Build: version.GetPatchVersion()},
 		MinCliVersion: plugin.VersionType{Major: 6, Minor: 7, Build: 0},
 		Commands: []plugin.Command{
 			{Name: "create-job", HelpText: CreateJobHelpText, UsageDetails: plugin.Usage{Usage: CreateJobUsage}},
