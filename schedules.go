@@ -5,7 +5,7 @@ import (
 	"code.cloudfoundry.org/cli/cf/terminal"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -18,7 +18,7 @@ func createJobSchedule(args []string) {
 	}
 	requestBody, _ := json.Marshal(GenericRequestFitsAll{SpaceGUID: currentSpace.Guid, Name: args[0], CronExpression: args[1]})
 	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/jobschedules", serviceInstance.DashboardUrl))
-	httpRequest := http.Request{Method: http.MethodPost, URL: requestUrl, Header: requestHeader, Body: ioutil.NopCloser(bytes.NewReader(requestBody))}
+	httpRequest := http.Request{Method: http.MethodPost, URL: requestUrl, Header: requestHeader, Body: io.NopCloser(bytes.NewReader(requestBody))}
 	resp, err := httpClient.Do(&httpRequest)
 	if err != nil {
 		fmt.Println(terminal.FailureColor(fmt.Sprintf("failed response from scheduler service: %s", err)))
@@ -26,11 +26,11 @@ func createJobSchedule(args []string) {
 	}
 	if resp != nil {
 		if resp.StatusCode != http.StatusCreated {
-			body, _ := io.readAll(resp.Body)
+			body, _ := io.ReadAll(resp.Body)
 			fmt.Printf("failed to create job schedule, reponse code %d, response: %s\n", resp.StatusCode, body)
 			os.Exit(1)
 		} else {
-			body, _ := io.readAll(resp.Body)
+			body, _ := io.ReadAll(resp.Body)
 			fmt.Printf("%s\n", body)
 			fmt.Println(terminal.SuccessColor("OK"))
 		}
@@ -45,7 +45,7 @@ func jobSchedules(args []string) {
 	request := GenericRequestFitsAll{SpaceGUID: currentSpace.Guid}
 	requestBody, _ := json.Marshal(request)
 	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/jobschedules", serviceInstance.DashboardUrl))
-	httpRequest := http.Request{Method: http.MethodGet, URL: requestUrl, Header: requestHeader, Body: ioutil.NopCloser(bytes.NewReader(requestBody))}
+	httpRequest := http.Request{Method: http.MethodGet, URL: requestUrl, Header: requestHeader, Body: io.NopCloser(bytes.NewReader(requestBody))}
 	fmt.Printf("Getting job schedules for org %s / space %s as %s\n\n", terminal.AdvisoryColor(currentOrg.Name), terminal.AdvisoryColor(currentSpace.Name), terminal.AdvisoryColor(currentUser))
 	resp, err := httpClient.Do(&httpRequest)
 	if err != nil {
@@ -56,7 +56,7 @@ func jobSchedules(args []string) {
 		fmt.Println(terminal.FailureColor(fmt.Sprintf("failed to list job schedules: %s", err)))
 		os.Exit(1)
 	}
-	body, _ := io.readAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	jsonResponse := JobScheduleListResponse{}
 	err = json.Unmarshal(body, &jsonResponse)
 	if err != nil {
@@ -76,7 +76,7 @@ func deleteJobSchedule(args []string) {
 	}
 	requestBody, _ := json.Marshal(GenericRequestFitsAll{SpaceGUID: currentSpace.Guid, Name: args[0], ScheduleGuid: args[1]})
 	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/jobschedules", serviceInstance.DashboardUrl))
-	httpRequest := http.Request{Method: http.MethodDelete, URL: requestUrl, Header: requestHeader, Body: ioutil.NopCloser(bytes.NewReader(requestBody))}
+	httpRequest := http.Request{Method: http.MethodDelete, URL: requestUrl, Header: requestHeader, Body: io.NopCloser(bytes.NewReader(requestBody))}
 	resp, err := httpClient.Do(&httpRequest)
 	if err != nil {
 		fmt.Println(terminal.FailureColor(fmt.Sprintf("failed response from scheduler service: %s", err)))
@@ -84,11 +84,11 @@ func deleteJobSchedule(args []string) {
 	}
 	if resp != nil {
 		if resp.StatusCode != http.StatusOK {
-			body, _ := io.readAll(resp.Body)
+			body, _ := io.ReadAll(resp.Body)
 			fmt.Printf("failed to delete job schedule, reponse code %d, response: %s\n", resp.StatusCode, body)
 			os.Exit(1)
 		} else {
-			body, _ := io.readAll(resp.Body)
+			body, _ := io.ReadAll(resp.Body)
 			fmt.Printf("%s\n", body)
 			fmt.Println(terminal.SuccessColor("OK"))
 		}
@@ -102,7 +102,7 @@ func createCallSchedule(args []string) {
 	}
 	requestBody, _ := json.Marshal(GenericRequestFitsAll{SpaceGUID: currentSpace.Guid, Name: args[0], CronExpression: args[1]})
 	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/callschedules", serviceInstance.DashboardUrl))
-	httpRequest := http.Request{Method: http.MethodPost, URL: requestUrl, Header: requestHeader, Body: ioutil.NopCloser(bytes.NewReader(requestBody))}
+	httpRequest := http.Request{Method: http.MethodPost, URL: requestUrl, Header: requestHeader, Body: io.NopCloser(bytes.NewReader(requestBody))}
 	resp, err := httpClient.Do(&httpRequest)
 	if err != nil {
 		fmt.Println(terminal.FailureColor(fmt.Sprintf("failed response from scheduler service: %s", err)))
@@ -110,11 +110,11 @@ func createCallSchedule(args []string) {
 	}
 	if resp != nil {
 		if resp.StatusCode != http.StatusCreated {
-			body, _ := io.readAll(resp.Body)
+			body, _ := io.ReadAll(resp.Body)
 			fmt.Printf("failed to create call schedule, reponse code %d, response: %s\n", resp.StatusCode, body)
 			os.Exit(1)
 		} else {
-			body, _ := io.readAll(resp.Body)
+			body, _ := io.ReadAll(resp.Body)
 			fmt.Printf("%s\n", body)
 			fmt.Println(terminal.SuccessColor("OK"))
 		}
@@ -129,7 +129,7 @@ func callSchedules(args []string) {
 	request := GenericRequestFitsAll{SpaceGUID: currentSpace.Guid}
 	requestBody, _ := json.Marshal(request)
 	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/callschedules", serviceInstance.DashboardUrl))
-	httpRequest := http.Request{Method: http.MethodGet, URL: requestUrl, Header: requestHeader, Body: ioutil.NopCloser(bytes.NewReader(requestBody))}
+	httpRequest := http.Request{Method: http.MethodGet, URL: requestUrl, Header: requestHeader, Body: io.NopCloser(bytes.NewReader(requestBody))}
 	fmt.Printf("Getting call schedules for org %s / space %s as %s\n\n", terminal.AdvisoryColor(currentOrg.Name), terminal.AdvisoryColor(currentSpace.Name), terminal.AdvisoryColor(currentUser))
 	resp, err := httpClient.Do(&httpRequest)
 	if err != nil {
@@ -140,7 +140,7 @@ func callSchedules(args []string) {
 		fmt.Println(terminal.FailureColor(fmt.Sprintf("failed to list call schedules: %s", err)))
 		os.Exit(1)
 	}
-	body, _ := io.readAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	jsonResponse := CallScheduleListResponse{}
 	err = json.Unmarshal(body, &jsonResponse)
 	if err != nil {
@@ -160,7 +160,7 @@ func deleteCallSchedule(args []string) {
 	}
 	requestBody, _ := json.Marshal(GenericRequestFitsAll{SpaceGUID: currentSpace.Guid, Name: args[0], ScheduleGuid: args[1]})
 	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/callschedules", serviceInstance.DashboardUrl))
-	httpRequest := http.Request{Method: http.MethodDelete, URL: requestUrl, Header: requestHeader, Body: ioutil.NopCloser(bytes.NewReader(requestBody))}
+	httpRequest := http.Request{Method: http.MethodDelete, URL: requestUrl, Header: requestHeader, Body: io.NopCloser(bytes.NewReader(requestBody))}
 	resp, err := httpClient.Do(&httpRequest)
 	if err != nil {
 		fmt.Println(terminal.FailureColor(fmt.Sprintf("failed response from scheduler service: %s", err)))
@@ -168,11 +168,11 @@ func deleteCallSchedule(args []string) {
 	}
 	if resp != nil {
 		if resp.StatusCode != http.StatusOK {
-			body, _ := io.readAll(resp.Body)
+			body, _ := io.ReadAll(resp.Body)
 			fmt.Printf("failed to delete call schedule, reponse code %d, response: %s\n", resp.StatusCode, body)
 			os.Exit(1)
 		} else {
-			body, _ := io.readAll(resp.Body)
+			body, _ := io.ReadAll(resp.Body)
 			fmt.Printf("%s\n", body)
 			fmt.Println(terminal.SuccessColor("OK"))
 		}

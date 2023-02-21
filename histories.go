@@ -5,7 +5,7 @@ import (
 	"code.cloudfoundry.org/cli/cf/terminal"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -32,7 +32,7 @@ func histories(args []string, jobOrCall string) {
 	request := HistoryRequest{SpaceGUID: currentSpace.Guid, Name: args[0]}
 	requestBody, _ := json.Marshal(request)
 	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/%shistories", serviceInstance.DashboardUrl, jobOrCall))
-	httpRequest := http.Request{Method: http.MethodGet, URL: requestUrl, Header: requestHeader, Body: ioutil.NopCloser(bytes.NewReader(requestBody))}
+	httpRequest := http.Request{Method: http.MethodGet, URL: requestUrl, Header: requestHeader, Body: io.NopCloser(bytes.NewReader(requestBody))}
 	fmt.Printf("Getting job/call history for org %s / space %s as %s\n\n", terminal.AdvisoryColor(currentOrg.Name), terminal.AdvisoryColor(currentSpace.Name), terminal.AdvisoryColor(currentUser))
 	resp, err := httpClient.Do(&httpRequest)
 	if err != nil {
@@ -43,7 +43,7 @@ func histories(args []string, jobOrCall string) {
 		fmt.Println(terminal.FailureColor(fmt.Sprintf("failed to list history: %s", err)))
 		os.Exit(1)
 	}
-	body, _ := io.readAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	jsonResponse := HistoryListResponse{}
 	err = json.Unmarshal(body, &jsonResponse)
 	if err != nil {
