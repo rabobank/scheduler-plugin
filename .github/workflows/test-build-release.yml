@@ -56,7 +56,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           asset_file_list=()
-          for f in dist/*/scheduler-plugin
+          for f in dist/*
           do
             asset_file_list+=("-a" "${f}")
           done
