@@ -35,7 +35,6 @@ func GetMajorVersion() int {
 }
 
 func GetMinorVersion() int {
-	fmt.Printf("GetVersion: %s\n", GetVersion())
 	if len(GetVersion()) == 0 {
 		return 0
 	}
