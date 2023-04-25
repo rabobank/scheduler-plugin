@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	HttpTimeout = 5
+	HttpTimeoutDefault = 5
 
 	CreateJobHelpText = "creates a schedulable job"
 	CreateJobUsage    = "create-job APP_NAME JOB_NAME COMMAND"
@@ -65,6 +65,7 @@ var (
 	httpClient      http.Client
 	FlagForce       bool
 	FlagAuthHeader  string
+	FlagTimeout     int
 )
 
 // Run must be implemented by any plugin because it is part of the plugin interface defined by the core CLI.
@@ -79,9 +80,12 @@ func (c *SchedulerPlugin) Run(cliConnection plugin.CliConnection, args []string)
 	pluginFlagSet := flag.NewFlagSet("scheduler-plugin", flag.ExitOnError)
 	pluginFlagSet.BoolVar(&FlagForce, "force", false, "exit with rc=0, even if the command fails")
 	pluginFlagSet.StringVar(&FlagAuthHeader, "auth-header", "", "the authorization header to use on the http call")
-	pluginFlagSet.Parse(args[1:])
+	pluginFlagSet.IntVar(&FlagTimeout, "timeout", HttpTimeoutDefault, "the timeout (in secs) to use on http calls")
+	if err := pluginFlagSet.Parse(args[1:]); err != nil {
+		fmt.Printf("failed to parse arguments: %s", err)
+	}
 
-	httpClient = http.Client{Timeout: time.Duration(HttpTimeout) * time.Second}
+	httpClient = http.Client{Timeout: time.Duration(FlagTimeout) * time.Second}
 	if args[0] != "install-plugin" && args[0] != "CLI-MESSAGE-UNINSTALL" {
 		precheck(cliConnection)
 		requestHeader = map[string][]string{"Content-Type": {"application/json"}, "Authorization": {accessToken}}
