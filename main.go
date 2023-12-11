@@ -18,7 +18,7 @@ const (
 	HttpTimeoutDefault = 5
 
 	CreateJobHelpText = "creates a schedulable job"
-	CreateJobUsage    = "create-job APP_NAME JOB_NAME COMMAND"
+	CreateJobUsage    = "create-job APP_NAME JOB_NAME COMMAND [MEMORY_IN_MB] [DISK_IN_MB]"
 	ListJobsHelpText  = "lists all schedulable jobs"
 	ListJobsUsage     = "jobs"
 	DeleteJobHelpText = "deletes a schedulable job"
@@ -87,7 +87,7 @@ func (c *SchedulerPlugin) Run(cliConnection plugin.CliConnection, args []string)
 
 	httpClient = http.Client{Timeout: time.Duration(FlagTimeout) * time.Second}
 	if args[0] != "install-plugin" && args[0] != "CLI-MESSAGE-UNINSTALL" {
-		precheck(cliConnection)
+		preCheck(cliConnection)
 		requestHeader = map[string][]string{"Content-Type": {"application/json"}, "Authorization": {accessToken}}
 	}
 
@@ -158,8 +158,8 @@ func (c *SchedulerPlugin) GetMetadata() plugin.PluginMetadata {
 	}
 }
 
-// precheck Does all common validations, like being logged in, and having a targeted org and space, and if there is an instance of the scheduler-service.
-func precheck(cliConnection plugin.CliConnection) {
+// preCheck Does all common validations, like being logged in, and having a targeted org and space, and if there is an instance of the scheduler-service.
+func preCheck(cliConnection plugin.CliConnection) {
 	config, _ := configv3.LoadConfig()
 	i18n.T = i18n.Init(config)
 	var schedulerService plugin_models.GetService_Model
