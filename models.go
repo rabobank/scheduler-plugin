@@ -12,6 +12,8 @@ type GenericRequestFitsAll struct {
 	CronExpression string `json:"cronexpression,omitempty"`
 	ExpressionType string `json:"expressiontype,omitempty"`
 	Command        string `json:"command,omitempty"`
+	MemoryInMB     int    `json:"memory_in_mb,omitempty"`
+	DiskInMB       int    `json:"disk_in_mb,omitempty"`
 	Url            string `json:"url,omitempty"`
 	AuthHeader     string `json:"authheader,omitempty"`
 	ScheduleGuid   string `json:"scheduleguid,omitempty"`
@@ -22,9 +24,11 @@ type JobListResponse struct {
 }
 
 type Job struct {
-	JobName string `json:"jobname"`
-	AppName string `json:"appname"`
-	Command string `json:"command"`
+	JobName    string `json:"jobname"`
+	AppName    string `json:"appname"`
+	Command    string `json:"command"`
+	MemoryInMB int    `json:"memory_in_mb"`
+	DiskInMB   int    `json:"disk_in_mb"`
 }
 
 type CallListResponse struct {

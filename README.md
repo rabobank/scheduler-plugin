@@ -26,3 +26,16 @@ Scheduler                1.0.14    run-job                                 runs 
 Scheduler                1.0.14    schedule-call                           schedules a call  
 Scheduler                1.0.14    schedule-job                            schedules a job  
 </pre>
+
+In addition there are a few flags you can use:
+
+* --force - Can be used with _delete-call_ and _delete-job_, the exit code will be 0 regardless the delete result.
+* --auth-header - Can be used with the _create-call_, the authorization header to use on the http call.
+* --timeout - Can be used on all subcommands, the timeout in seconds that is used for all interactions with the scheduler service broker.
+* --memory_in_mb - Can be used with _create-job_, the amount of memory in MB to use for the job.
+* --disk_in_mb - Can be used with _create-job_, the amount of disk in MB to use for the job.
+
+The flags should be used just after the subcommand, for example:
+````
+cf create-job --memory_in_mb=42 --disk_in_mb 67 myapp job4711 "cat /proc/cpuinfo" 
+````

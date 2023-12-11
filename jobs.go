@@ -13,7 +13,7 @@ import (
 )
 
 func createJob(cliConnection plugin.CliConnection, args []string) {
-	if len(args) != 3 {
+	if len(args) < 3 || len(args) > 5 {
 		fmt.Printf("Incorrect Usage: the required arguments are `APP_NAME` and `JOB_NAME` and `COMMAND`\n\nNAME:\n   %s\n\nUSAGE:\n   %s\n", CreateJobHelpText, CreateJobUsage)
 		os.Exit(1)
 	}
@@ -22,7 +22,7 @@ func createJob(cliConnection plugin.CliConnection, args []string) {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	requestBody, _ := json.Marshal(GenericRequestFitsAll{AppGUID: app.Guid, SpaceGUID: currentSpace.Guid, Name: args[1], Command: args[2]})
+	requestBody, _ := json.Marshal(GenericRequestFitsAll{AppGUID: app.Guid, SpaceGUID: currentSpace.Guid, Name: args[1], Command: args[2], MemoryInMB: FlagMemoryInMB, DiskInMB: FlagDiskInMB})
 	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/jobs", serviceInstance.DashboardUrl))
 	httpRequest := http.Request{Method: http.MethodPost, URL: requestUrl, Header: requestHeader, Body: io.NopCloser(bytes.NewReader(requestBody))}
 	resp, err := httpClient.Do(&httpRequest)
@@ -94,9 +94,9 @@ func jobs(args []string) {
 	if err != nil {
 		fmt.Println(terminal.FailureColor(fmt.Sprintf("failed to parse response: %s", err)))
 	}
-	table := terminal.NewTable([]string{"Job Name", "App Name", "Command"})
+	table := terminal.NewTable([]string{"Job Name", "App Name", "Command", "MemoryInMB", "DiskInMB"})
 	for _, job := range jsonResponse.Jobs {
-		table.Add(job.JobName, job.AppName, job.Command)
+		table.Add(job.JobName, job.AppName, job.Command, fmt.Sprintf("%d", job.MemoryInMB), fmt.Sprintf("%d", job.DiskInMB))
 	}
 	_ = table.PrintTo(os.Stdout)
 }

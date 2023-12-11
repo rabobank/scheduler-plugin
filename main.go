@@ -66,6 +66,8 @@ var (
 	FlagForce       bool
 	FlagAuthHeader  string
 	FlagTimeout     int
+	FlagMemoryInMB  int
+	FlagDiskInMB    int
 )
 
 // Run must be implemented by any plugin because it is part of the plugin interface defined by the core CLI.
@@ -78,9 +80,11 @@ var (
 // The CLI will exit 0 if the plugin exits 0 and will exit 1 should the plugin exits nonzero.
 func (c *SchedulerPlugin) Run(cliConnection plugin.CliConnection, args []string) {
 	pluginFlagSet := flag.NewFlagSet("scheduler-plugin", flag.ExitOnError)
-	pluginFlagSet.BoolVar(&FlagForce, "force", false, "exit with rc=0, even if the command fails")
-	pluginFlagSet.StringVar(&FlagAuthHeader, "auth-header", "", "the authorization header to use on the http call")
+	pluginFlagSet.BoolVar(&FlagForce, "force", false, "exit with rc=0, even if the command fails (only applicable for deletes)")
+	pluginFlagSet.StringVar(&FlagAuthHeader, "auth-header", "", "the authorization header to use on the http call (only applicable for create-call)")
 	pluginFlagSet.IntVar(&FlagTimeout, "timeout", HttpTimeoutDefault, "the timeout (in secs) to use on http calls")
+	pluginFlagSet.IntVar(&FlagMemoryInMB, "memory_in_mb", 0, "memory in MB to use for the job (only applicable for create-job)")
+	pluginFlagSet.IntVar(&FlagDiskInMB, "disk_in_mb", 0, "disk in MB to use for the job (only applicable for create-job)")
 	if err := pluginFlagSet.Parse(args[1:]); err != nil {
 		fmt.Printf("failed to parse arguments: %s", err)
 	}
