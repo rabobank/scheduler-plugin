@@ -37,5 +37,5 @@ In addition there are a few flags you can use:
 
 The flags should be used just after the subcommand, for example:
 ````
-cf create-job --memory_in_mb=42 --disk_in_mb 67 myapp job4711 "cat /proc/cpuinfo" 
+cf create-job --memory_in_mb=42 --disk_in_mb=67 myapp job4711 "cat /proc/cpuinfo" 
 ````

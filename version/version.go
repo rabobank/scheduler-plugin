@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-var VERSION = "0.0.0"
+var VERSION = "1.0.9"
 var COMMIT = "dev"
 
 type VersionCommand struct {
