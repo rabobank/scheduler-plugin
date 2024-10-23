@@ -3,7 +3,10 @@ module github.com/rabobank/scheduler-plugin
 go 1.23
 
 replace (
+	cloud.google.com/go => cloud.google.com/go v0.116.0
 	github.com/envoyproxy/protoc-gen-validate => github.com/envoyproxy/protoc-gen-validate v1.1.0
+	github.com/golang/mock => github.com/golang/mock v1.6.0
+	github.com/jung-kurt/gofpdf => github.com/jung-kurt/gofpdf v1.13.0
 	github.com/pkg/sftp => github.com/pkg/sftp v1.13.6
 	github.com/yuin/goldmark => github.com/yuin/goldmark v1.7.8
 	golang.org/x/crypto => golang.org/x/crypto v0.28.0
