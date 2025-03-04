@@ -6,6 +6,7 @@ toolchain go1.23.3
 
 replace (
 	github.com/envoyproxy/protoc-gen-validate => github.com/envoyproxy/protoc-gen-validate v1.2.1
+	github.com/golang/glog => github.com/golang/glog v1.2.4
 	golang.org/x/crypto => golang.org/x/crypto v0.35.0
 	golang.org/x/net => golang.org/x/net v0.35.0
 	golang.org/x/text => golang.org/x/text v0.22.0
