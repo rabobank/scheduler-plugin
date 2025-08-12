@@ -39,7 +39,7 @@ jobs:
     needs: build-job
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install versioning tool
         run: go install github.com/xchapter7x/versioning@latest
       - name: Determine Version
