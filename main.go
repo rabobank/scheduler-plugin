@@ -201,7 +201,7 @@ func preCheck(cliConnection plugin.CliConnection) {
 
 	CF_HOME := os.Getenv("CF_HOME")
 	if CF_HOME == "" {
-		CF_HOME = os.ExpandEnv("$HOME/.cf")
+		CF_HOME = os.Getenv("HOME")
 	}
 
 	if cfConfig, err := cfconfig.NewFromCFHomeDir(CF_HOME); err != nil {
