@@ -3,27 +3,27 @@ package main
 import (
 	"bytes"
 	"code.cloudfoundry.org/cli/cf/terminal"
-	"code.cloudfoundry.org/cli/plugin"
 	"encoding/json"
 	"fmt"
+	cfclient "github.com/cloudfoundry/go-cfclient/v3/client"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
 )
 
-func createJob(cliConnection plugin.CliConnection, args []string) {
+func createJob(args []string) {
 	if len(args) < 3 || len(args) > 5 {
 		fmt.Printf("Incorrect Usage: the required arguments are `APP_NAME` and `JOB_NAME` and `COMMAND`\n\nNAME:\n   %s\n\nUSAGE:\n   %s\n", CreateJobHelpText, CreateJobUsage)
 		os.Exit(1)
 	}
-	app, err := cliConnection.GetApp(args[0])
+	app, err := cfClient.Applications.Single(ctx, &cfclient.AppListOptions{ListOptions: &cfclient.ListOptions{}, Names: cfclient.Filter{Values: []string{args[0]}}, SpaceGUIDs: cfclient.Filter{Values: []string{currentSpace.Guid}}})
 	if err != nil {
-		fmt.Println(err)
+		fmt.Printf("app lookup for %s in space %s returned error: %s\n", args[0], currentSpace.Name, err)
 		os.Exit(1)
 	}
-	requestBody, _ := json.Marshal(GenericRequestFitsAll{AppGUID: app.Guid, SpaceGUID: currentSpace.Guid, Name: args[1], Command: args[2], MemoryInMB: FlagMemoryInMB, DiskInMB: FlagDiskInMB})
-	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/jobs", serviceInstance.DashboardUrl))
+	requestBody, _ := json.Marshal(GenericRequestFitsAll{AppGUID: app.GUID, SpaceGUID: currentSpace.Guid, Name: args[1], Command: args[2], MemoryInMB: FlagMemoryInMB, DiskInMB: FlagDiskInMB})
+	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/jobs", *serviceInstance.DashboardURL))
 	httpRequest := http.Request{Method: http.MethodPost, URL: requestUrl, Header: requestHeader, Body: io.NopCloser(bytes.NewReader(requestBody))}
 	resp, err := httpClient.Do(&httpRequest)
 	if err != nil {
@@ -49,7 +49,7 @@ func runJob(args []string) {
 		os.Exit(1)
 	}
 	requestBody, _ := json.Marshal(GenericRequestFitsAll{SpaceGUID: currentSpace.Guid, Name: args[0]})
-	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/jobs", serviceInstance.DashboardUrl))
+	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/jobs", *serviceInstance.DashboardURL))
 	httpRequest := http.Request{Method: http.MethodPut, URL: requestUrl, Header: requestHeader, Body: io.NopCloser(bytes.NewReader(requestBody))}
 	resp, err := httpClient.Do(&httpRequest)
 	if err != nil {
@@ -76,16 +76,12 @@ func jobs(args []string) {
 	}
 	request := GenericRequestFitsAll{SpaceGUID: currentSpace.Guid}
 	requestBody, _ := json.Marshal(request)
-	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/jobs", serviceInstance.DashboardUrl))
+	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/jobs", *serviceInstance.DashboardURL))
 	httpRequest := http.Request{Method: http.MethodGet, URL: requestUrl, Header: requestHeader, Body: io.NopCloser(bytes.NewReader(requestBody))}
 	fmt.Printf("Getting scheduled jobs for org %s / space %s as %s\n\n", terminal.AdvisoryColor(currentOrg.Name), terminal.AdvisoryColor(currentSpace.Name), terminal.AdvisoryColor(currentUser))
 	resp, err := httpClient.Do(&httpRequest)
 	if err != nil {
 		fmt.Println(terminal.FailureColor(fmt.Sprintf("failed response from scheduler service: %s", err)))
-		os.Exit(1)
-	}
-	if err != nil {
-		fmt.Println(terminal.FailureColor(fmt.Sprintf("failed to list job: %s", err)))
 		os.Exit(1)
 	}
 	body, _ := io.ReadAll(resp.Body)
@@ -107,7 +103,7 @@ func deleteJob(args []string) {
 		os.Exit(1)
 	}
 	requestBody, _ := json.Marshal(GenericRequestFitsAll{SpaceGUID: currentSpace.Guid, Name: args[0]})
-	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/jobs", serviceInstance.DashboardUrl))
+	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/jobs", *serviceInstance.DashboardURL))
 	httpRequest := http.Request{Method: http.MethodDelete, URL: requestUrl, Header: requestHeader, Body: io.NopCloser(bytes.NewReader(requestBody))}
 	resp, err := httpClient.Do(&httpRequest)
 	if err != nil {

@@ -6,9 +6,14 @@ import (
 	"code.cloudfoundry.org/cli/plugin"
 	plugin_models "code.cloudfoundry.org/cli/plugin/models"
 	"code.cloudfoundry.org/cli/util/configv3"
+	"context"
 	"flag"
 	"fmt"
+	cfclient "github.com/cloudfoundry/go-cfclient/v3/client"
+	cfconfig "github.com/cloudfoundry/go-cfclient/v3/config"
+	"github.com/cloudfoundry/go-cfclient/v3/resource"
 	"github.com/rabobank/scheduler-plugin/version"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -57,10 +62,12 @@ const (
 
 var (
 	accessToken     string
+	cfClient        *cfclient.Client
+	ctx             = context.Background()
 	currentOrg      plugin_models.Organization
 	currentSpace    plugin_models.Space
 	currentUser     string
-	serviceInstance plugin_models.GetService_Model
+	serviceInstance resource.ServiceInstance
 	requestHeader   http.Header
 	httpClient      http.Client
 	FlagForce       bool
@@ -97,13 +104,13 @@ func (c *SchedulerPlugin) Run(cliConnection plugin.CliConnection, args []string)
 
 	switch args[0] {
 	case "create-job":
-		createJob(cliConnection, pluginFlagSet.Args())
+		createJob(pluginFlagSet.Args())
 	case "jobs":
 		jobs(pluginFlagSet.Args())
 	case "delete-job":
 		deleteJob(pluginFlagSet.Args())
 	case "create-call":
-		createCall(cliConnection, pluginFlagSet.Args())
+		createCall(pluginFlagSet.Args())
 	case "calls":
 		calls(pluginFlagSet.Args())
 	case "delete-call":
@@ -166,7 +173,7 @@ func (c *SchedulerPlugin) GetMetadata() plugin.PluginMetadata {
 func preCheck(cliConnection plugin.CliConnection) {
 	config, _ := configv3.LoadConfig()
 	i18n.T = i18n.Init(config)
-	var schedulerService plugin_models.GetService_Model
+	var schedulerService resource.ServiceInstance
 	loggedIn, err := cliConnection.IsLoggedIn()
 	if err != nil || !loggedIn {
 		fmt.Println(terminal.NotLoggedInText())
@@ -191,29 +198,42 @@ func preCheck(cliConnection plugin.CliConnection) {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	services, err := cliConnection.GetServices()
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+
+	CF_HOME := os.Getenv("CF_HOME")
+	if CF_HOME == "" {
+		CF_HOME = os.ExpandEnv("$HOME/.cf")
+	}
+
+	if cfConfig, err := cfconfig.NewFromCFHomeDir(CF_HOME); err != nil {
+		log.Fatalf("failed to create new config: %s", err)
 	} else {
-		var schedulerServiceFound = false
-		var instanceName string
-		for _, service := range services {
-			if service.Service.Name == "scheduler" {
-				schedulerServiceFound = true
-				instanceName = service.Name
+		if cfClient, err = cfclient.New(cfConfig); err != nil {
+			log.Fatalf("failed to create new cf client: %s", err)
+		} else {
+			if servicePlans, err := cfClient.ServicePlans.ListAll(ctx, &cfclient.ServicePlanListOptions{ServiceOfferingNames: cfclient.Filter{Values: []string{"scheduler"}}}); err != nil {
+				log.Fatalf("failed to get service plans for scheduler service: %s", err)
+			} else if len(servicePlans) == 0 {
+				fmt.Println(terminal.FailureColor("no service plan found for scheduler service"))
+				os.Exit(1)
+			} else {
+				schedulerServices, err := cfClient.ServiceInstances.ListAll(ctx, &cfclient.ServiceInstanceListOptions{
+					ListOptions:      &cfclient.ListOptions{},
+					Type:             "managed",
+					SpaceGUIDs:       cfclient.Filter{Values: []string{currentSpace.Guid}},
+					ServicePlanGUIDs: cfclient.Filter{Values: []string{servicePlans[0].GUID}},
+				})
+				if len(schedulerServices) == 0 {
+					fmt.Println(terminal.FailureColor("no scheduler service instance found, please create a scheduler service instance first"))
+				}
+				schedulerService = *schedulerServices[0]
+				if err != nil {
+					fmt.Println(err)
+					os.Exit(1)
+				}
 			}
-		}
-		if !schedulerServiceFound {
-			fmt.Println(terminal.FailureColor("no scheduler service instance found, please create a scheduler service instance first"))
-		}
-		schedulerService, err = cliConnection.GetService(instanceName)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			serviceInstance = schedulerService
 		}
 	}
-	serviceInstance = schedulerService
 }
 
 // Unlike most Go programs, the `Main()` function will not be used to run all of the commands provided in your plugin.
