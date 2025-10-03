@@ -31,7 +31,7 @@ func callHistories(args []string) {
 func histories(args []string, jobOrCall string) {
 	request := HistoryRequest{SpaceGUID: currentSpace.Guid, Name: args[0]}
 	requestBody, _ := json.Marshal(request)
-	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/%shistories", serviceInstance.DashboardURL, jobOrCall))
+	requestUrl, _ := url.Parse(fmt.Sprintf("%s/api/%shistories", *serviceInstance.DashboardURL, jobOrCall))
 	httpRequest := http.Request{Method: http.MethodGet, URL: requestUrl, Header: requestHeader, Body: io.NopCloser(bytes.NewReader(requestBody))}
 	fmt.Printf("Getting job/call history for org %s / space %s as %s\n\n", terminal.AdvisoryColor(currentOrg.Name), terminal.AdvisoryColor(currentSpace.Name), terminal.AdvisoryColor(currentUser))
 	resp, err := httpClient.Do(&httpRequest)
