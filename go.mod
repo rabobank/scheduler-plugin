@@ -4,14 +4,17 @@ go 1.25
 
 replace (
 	github.com/envoyproxy/protoc-gen-validate => github.com/envoyproxy/protoc-gen-validate v1.2.1
+	github.com/gogo/protobuf => github.com/gogo/protobuf v1.3.2
 	github.com/golang/glog => github.com/golang/glog v1.2.5
+	github.com/nats-io/nats-server/v2 => github.com/nats-io/nats-server/v2 v2.10.27
 	github.com/pkg/sftp => github.com/pkg/sftp v1.13.9
+	github.com/prometheus/client_golang => github.com/prometheus/client_golang v1.17.0
 	github.com/yuin/goldmark => github.com/yuin/goldmark v1.7.13
-	golang.org/x/crypto => golang.org/x/crypto v0.42.0
-	golang.org/x/net => golang.org/x/net v0.44.0
-	golang.org/x/text => golang.org/x/text v0.29.0
-	golang.org/x/tools => golang.org/x/tools v0.37.0
-	google.golang.org/grpc => google.golang.org/grpc v1.75.1
+	golang.org/x/crypto => golang.org/x/crypto v0.43.0
+	golang.org/x/net => golang.org/x/net v0.46.0
+	golang.org/x/text => golang.org/x/text v0.30.0
+	golang.org/x/tools => golang.org/x/tools v0.38.0
+	google.golang.org/grpc => google.golang.org/grpc v1.76.0
 	google.golang.org/protobuf => google.golang.org/protobuf v1.36.10
 	gopkg.in/yaml.v2 => gopkg.in/yaml.v2 v2.4.0
 )
@@ -22,8 +25,8 @@ require (
 )
 
 require (
-	code.cloudfoundry.org/bytefmt v0.53.0 // indirect
-	code.cloudfoundry.org/cli-plugin-repo v0.0.0-20250930154843-ac82e306a475 // indirect
+	code.cloudfoundry.org/bytefmt v0.54.0 // indirect
+	code.cloudfoundry.org/cli-plugin-repo v0.0.0-20251009190434-d2babf059e69 // indirect
 	code.cloudfoundry.org/go-log-cache v1.0.0 // indirect
 	code.cloudfoundry.org/go-loggregator v7.4.0+incompatible // indirect
 	code.cloudfoundry.org/gofileutils v0.0.0-20170111115228-4d0c80011a0f // indirect
@@ -69,13 +72,13 @@ require (
 	github.com/stretchr/testify v1.11.1 // indirect
 	github.com/tedsuo/rata v1.0.0 // indirect
 	github.com/vito/go-interact v1.0.0 // indirect
-	golang.org/x/crypto v0.42.0 // indirect
-	golang.org/x/oauth2 v0.31.0 // indirect
-	golang.org/x/sys v0.36.0 // indirect
-	golang.org/x/term v0.35.0 // indirect
-	golang.org/x/text v0.29.0 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20250929231259-57b25ae835d4 // indirect
-	google.golang.org/grpc v1.75.1 // indirect
+	golang.org/x/crypto v0.43.0 // indirect
+	golang.org/x/oauth2 v0.32.0 // indirect
+	golang.org/x/sys v0.37.0 // indirect
+	golang.org/x/term v0.36.0 // indirect
+	golang.org/x/text v0.30.0 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20251007200510-49b9836ed3ff // indirect
+	google.golang.org/grpc v1.76.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/cheggaaa/pb.v1 v1.0.28 // indirect
