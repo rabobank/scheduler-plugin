@@ -224,6 +224,7 @@ func preCheck(cliConnection plugin.CliConnection) {
 				})
 				if len(schedulerServices) == 0 {
 					fmt.Println(terminal.FailureColor("no scheduler service instance found, please create a scheduler service instance first"))
+					os.Exit(1)
 				}
 				schedulerService = *schedulerServices[0]
 				if err != nil {

@@ -85,6 +85,10 @@ func jobs(args []string) {
 		os.Exit(1)
 	}
 	body, _ := io.ReadAll(resp.Body)
+	if resp.StatusCode != http.StatusOK {
+		fmt.Println(terminal.FailureColor(fmt.Sprintf("response (%d) from scheduler service: %s", resp.StatusCode, body)))
+		os.Exit(1)
+	}
 	jsonResponse := JobListResponse{}
 	err = json.Unmarshal(body, &jsonResponse)
 	if err != nil {
