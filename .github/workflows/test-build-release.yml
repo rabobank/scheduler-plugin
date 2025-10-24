@@ -47,7 +47,7 @@ jobs:
         run: |
           echo VERSION=$(~/go/bin/versioning bump_patch) >> ${GITHUB_ENV}
       - name: Download Artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dist
           path: dist
