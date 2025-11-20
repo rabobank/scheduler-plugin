@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup Go version
         uses: actions/setup-go@v6
         with:
@@ -39,7 +39,7 @@ jobs:
     needs: build-job
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Install versioning tool
         run: go install github.com/xchapter7x/versioning@latest
       - name: Determine Version
