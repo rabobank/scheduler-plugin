@@ -2,13 +2,14 @@ package main
 
 import (
 	"bytes"
-	"code.cloudfoundry.org/cli/cf/terminal"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
+
+	"code.cloudfoundry.org/cli/v8/cf/terminal"
 )
 
 func createJobSchedule(args []string) {
