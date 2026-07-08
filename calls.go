@@ -2,14 +2,15 @@ package main
 
 import (
 	"bytes"
-	"code.cloudfoundry.org/cli/cf/terminal"
 	"encoding/json"
 	"fmt"
-	cfclient "github.com/cloudfoundry/go-cfclient/v3/client"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
+
+	"code.cloudfoundry.org/cli/v8/cf/terminal"
+	cfclient "github.com/cloudfoundry/go-cfclient/v3/client"
 )
 
 func createCall(args []string) {
