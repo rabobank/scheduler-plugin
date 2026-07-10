@@ -1,22 +1,23 @@
 package main
 
 import (
-	"code.cloudfoundry.org/cli/cf/i18n"
-	"code.cloudfoundry.org/cli/cf/terminal"
-	"code.cloudfoundry.org/cli/plugin"
-	plugin_models "code.cloudfoundry.org/cli/plugin/models"
-	"code.cloudfoundry.org/cli/util/configv3"
 	"context"
 	"flag"
 	"fmt"
-	cfclient "github.com/cloudfoundry/go-cfclient/v3/client"
-	cfconfig "github.com/cloudfoundry/go-cfclient/v3/config"
-	"github.com/cloudfoundry/go-cfclient/v3/resource"
-	"github.com/rabobank/scheduler-plugin/version"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	"code.cloudfoundry.org/cli/v8/cf/i18n"
+	"code.cloudfoundry.org/cli/v8/cf/terminal"
+	"code.cloudfoundry.org/cli/v8/plugin"
+	plugin_models "code.cloudfoundry.org/cli/v8/plugin/models"
+	"code.cloudfoundry.org/cli/v8/util/configv3"
+	cfclient "github.com/cloudfoundry/go-cfclient/v3/client"
+	cfconfig "github.com/cloudfoundry/go-cfclient/v3/config"
+	"github.com/cloudfoundry/go-cfclient/v3/resource"
+	"github.com/rabobank/scheduler-plugin/version"
 )
 
 const (

@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"code.cloudfoundry.org/cli/cf/terminal"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,6 +9,8 @@ import (
 	"net/url"
 	"os"
 	"time"
+
+	"code.cloudfoundry.org/cli/v8/cf/terminal"
 )
 
 func jobHistories(args []string) {
