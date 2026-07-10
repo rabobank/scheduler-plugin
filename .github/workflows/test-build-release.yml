@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Setup Go version
         uses: actions/setup-go@v6
         with:
@@ -47,7 +47,7 @@ jobs:
         run: |
           echo VERSION=$(~/go/bin/versioning bump_patch) >> ${GITHUB_ENV}
       - name: Download Artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: dist
           path: dist
