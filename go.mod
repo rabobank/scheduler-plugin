@@ -16,7 +16,7 @@ replace (
 
 require (
 	code.cloudfoundry.org/cli/v8 v8.18.4
-	github.com/cloudfoundry/go-cfclient/v3 v3.0.0-alpha.21
+	github.com/cloudfoundry/go-cfclient/v3 v3.0.0-beta.1
 )
 
 require (
