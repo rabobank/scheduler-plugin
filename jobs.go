@@ -34,7 +34,7 @@ func createJob(args []string) {
 	if resp != nil {
 		if resp.StatusCode != http.StatusCreated {
 			body, _ := io.ReadAll(resp.Body)
-			fmt.Printf("failed to create job, reponse code %d, response: %s\n", resp.StatusCode, body)
+			fmt.Printf("failed to create job, response code %d, response: %s\n", resp.StatusCode, body)
 			os.Exit(1)
 		} else {
 			body, _ := io.ReadAll(resp.Body)
@@ -60,7 +60,7 @@ func runJob(args []string) {
 	if resp != nil {
 		if resp.StatusCode != http.StatusOK {
 			body, _ := io.ReadAll(resp.Body)
-			fmt.Printf("failed to run job, reponse code %d, response: %s\n", resp.StatusCode, body)
+			fmt.Printf("failed to run job, response code %d, response: %s\n", resp.StatusCode, body)
 			os.Exit(1)
 		} else {
 			body, _ := io.ReadAll(resp.Body)
@@ -72,7 +72,7 @@ func runJob(args []string) {
 
 func jobs(args []string) {
 	if len(args) != 0 {
-		fmt.Printf("Incorrect Usage: there should be no arguments to this command`\n\nNAME:\n   %s\n\nUSAGE:\n   %s\n", ListJobsHelpText, ListJobsUsage)
+		fmt.Printf("Incorrect Usage: there should be no arguments to this command\n\nNAME:\n   %s\n\nUSAGE:\n   %s\n", ListJobsHelpText, ListJobsUsage)
 		os.Exit(1)
 	}
 	request := GenericRequestFitsAll{SpaceGUID: currentSpace.Guid}
@@ -118,7 +118,7 @@ func deleteJob(args []string) {
 	if resp != nil {
 		if resp.StatusCode != http.StatusOK {
 			body, _ := io.ReadAll(resp.Body)
-			fmt.Printf("failed to delete job, reponse code %d, response: %s\n", resp.StatusCode, body)
+			fmt.Printf("failed to delete job, response code %d, response: %s\n", resp.StatusCode, body)
 			if FlagForce {
 				os.Exit(0)
 			}

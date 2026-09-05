@@ -28,7 +28,7 @@ func createJobSchedule(args []string) {
 	if resp != nil {
 		if resp.StatusCode != http.StatusCreated {
 			body, _ := io.ReadAll(resp.Body)
-			fmt.Printf("failed to create job schedule, reponse code %d, response: %s\n", resp.StatusCode, body)
+			fmt.Printf("failed to create job schedule, response code %d, response: %s\n", resp.StatusCode, body)
 			os.Exit(1)
 		} else {
 			body, _ := io.ReadAll(resp.Body)
@@ -40,7 +40,7 @@ func createJobSchedule(args []string) {
 
 func jobSchedules(args []string) {
 	if len(args) != 0 {
-		fmt.Printf("Incorrect Usage: there should be no arguments to this command`\n\nNAME:\n   %s\n\nUSAGE:\n   %s\n", ListJobSchedulesHelpText, ListJobSchedulesUsage)
+		fmt.Printf("Incorrect Usage: there should be no arguments to this command\n\nNAME:\n   %s\n\nUSAGE:\n   %s\n", ListJobSchedulesHelpText, ListJobSchedulesUsage)
 		os.Exit(1)
 	}
 	request := GenericRequestFitsAll{SpaceGUID: currentSpace.Guid}
@@ -86,7 +86,7 @@ func deleteJobSchedule(args []string) {
 	if resp != nil {
 		if resp.StatusCode != http.StatusOK {
 			body, _ := io.ReadAll(resp.Body)
-			fmt.Printf("failed to delete job schedule, reponse code %d, response: %s\n", resp.StatusCode, body)
+			fmt.Printf("failed to delete job schedule, response code %d, response: %s\n", resp.StatusCode, body)
 			os.Exit(1)
 		} else {
 			body, _ := io.ReadAll(resp.Body)
@@ -112,7 +112,7 @@ func createCallSchedule(args []string) {
 	if resp != nil {
 		if resp.StatusCode != http.StatusCreated {
 			body, _ := io.ReadAll(resp.Body)
-			fmt.Printf("failed to create call schedule, reponse code %d, response: %s\n", resp.StatusCode, body)
+			fmt.Printf("failed to create call schedule, response code %d, response: %s\n", resp.StatusCode, body)
 			os.Exit(1)
 		} else {
 			body, _ := io.ReadAll(resp.Body)
@@ -124,7 +124,7 @@ func createCallSchedule(args []string) {
 
 func callSchedules(args []string) {
 	if len(args) != 0 {
-		fmt.Printf("Incorrect Usage: there should be no arguments to this command`\n\nNAME:\n   %s\n\nUSAGE:\n   %s\n", ListCallSchedulesHelpText, ListCallSchedulesUsage)
+		fmt.Printf("Incorrect Usage: there should be no arguments to this command\n\nNAME:\n   %s\n\nUSAGE:\n   %s\n", ListCallSchedulesHelpText, ListCallSchedulesUsage)
 		os.Exit(1)
 	}
 	request := GenericRequestFitsAll{SpaceGUID: currentSpace.Guid}
@@ -170,7 +170,7 @@ func deleteCallSchedule(args []string) {
 	if resp != nil {
 		if resp.StatusCode != http.StatusOK {
 			body, _ := io.ReadAll(resp.Body)
-			fmt.Printf("failed to delete call schedule, reponse code %d, response: %s\n", resp.StatusCode, body)
+			fmt.Printf("failed to delete call schedule, response code %d, response: %s\n", resp.StatusCode, body)
 			os.Exit(1)
 		} else {
 			body, _ := io.ReadAll(resp.Body)
