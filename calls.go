@@ -34,7 +34,7 @@ func createCall(args []string) {
 	if resp != nil {
 		if resp.StatusCode != http.StatusCreated {
 			body, _ := io.ReadAll(resp.Body)
-			fmt.Printf("failed to create call, reponse code %d, response: %s\n", resp.StatusCode, body)
+			fmt.Printf("failed to create call, response code %d, response: %s\n", resp.StatusCode, body)
 			os.Exit(1)
 		} else {
 			body, _ := io.ReadAll(resp.Body)
@@ -60,7 +60,7 @@ func runCall(args []string) {
 	if resp != nil {
 		if resp.StatusCode != http.StatusOK {
 			body, _ := io.ReadAll(resp.Body)
-			fmt.Printf("failed to run call, reponse code %d, response: %s\n", resp.StatusCode, body)
+			fmt.Printf("failed to run call, response code %d, response: %s\n", resp.StatusCode, body)
 			os.Exit(1)
 		} else {
 			body, _ := io.ReadAll(resp.Body)
@@ -72,7 +72,7 @@ func runCall(args []string) {
 
 func calls(args []string) {
 	if len(args) != 0 {
-		fmt.Printf("Incorrect Usage: there should be no arguments to this command`\n\nNAME:\n   %s\n\nUSAGE:\n   %s\n", ListCallsHelpText, ListCallsUsage)
+		fmt.Printf("Incorrect Usage: there should be no arguments to this command\n\nNAME:\n   %s\n\nUSAGE:\n   %s\n", ListCallsHelpText, ListCallsUsage)
 		os.Exit(1)
 	}
 	request := GenericRequestFitsAll{SpaceGUID: currentSpace.Guid}
@@ -104,7 +104,7 @@ func calls(args []string) {
 
 func deleteCall(args []string) {
 	if len(args) != 1 {
-		fmt.Printf("Incorrect Usage: the required arguments are `JOB_NAME`\n\nNAME:\n   %s\n\nUSAGE:\n   %s\n", DeleteCallHelpText, DeleteCallUsage)
+		fmt.Printf("Incorrect Usage: the required arguments are `CALL_NAME`\n\nNAME:\n   %s\n\nUSAGE:\n   %s\n", DeleteCallHelpText, DeleteCallUsage)
 		os.Exit(1)
 	}
 	requestBody, _ := json.Marshal(GenericRequestFitsAll{SpaceGUID: currentSpace.Guid, Name: args[0]})
@@ -118,7 +118,7 @@ func deleteCall(args []string) {
 	if resp != nil {
 		if resp.StatusCode != http.StatusOK {
 			body, _ := io.ReadAll(resp.Body)
-			fmt.Printf("failed to delete call, reponse code %d, response: %s\n", resp.StatusCode, body)
+			fmt.Printf("failed to delete call, response code %d, response: %s\n", resp.StatusCode, body)
 			if FlagForce {
 				os.Exit(0)
 			}
