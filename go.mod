@@ -6,9 +6,10 @@ replace (
 	github.com/moby/moby => github.com/moby/moby v20.10.12+incompatible
 	github.com/vito/go-interact => github.com/vito/go-interact v1.0.0
 	golang.org/x/crypto => golang.org/x/crypto v0.57.0
+	golang.org/x/mod => golang.org/x/mod v0.41.0
 	golang.org/x/net => golang.org/x/net v0.59.0
 	golang.org/x/text => golang.org/x/text v0.42.0
-	golang.org/x/tools => golang.org/x/tools v0.50.0
+	golang.org/x/tools => golang.org/x/tools v0.51.0
 	google.golang.org/grpc => google.golang.org/grpc v1.84.0
 	google.golang.org/protobuf => google.golang.org/protobuf v1.36.12
 	gopkg.in/yaml.v2 => gopkg.in/yaml.v2 v2.4.0
@@ -30,7 +31,7 @@ require (
 	github.com/bmizerany/pat v0.0.0-20210406213842-e4b6760bdd6f // indirect
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
 	github.com/cloudfoundry/bosh-cli v6.4.1+incompatible // indirect
-	github.com/cloudfoundry/bosh-utils v0.0.655 // indirect
+	github.com/cloudfoundry/bosh-utils v0.0.656 // indirect
 	github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0 // indirect
 	github.com/cppforlife/go-patch v0.2.0 // indirect
 	github.com/fatih/color v1.19.0 // indirect
