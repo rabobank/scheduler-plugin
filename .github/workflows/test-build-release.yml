@@ -7,6 +7,28 @@ on:
       - main
 
 jobs:
+  check-pr-author:
+    name: Check merged PR author
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+    steps:
+      - name: Check whether the pushed commit belongs to a Dependabot PR
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          has_dependabot_pr=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/pulls" --jq 'any(.[]; .user.login == "dependabot[bot]")')
+          commit_author=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}" --jq '.author.login // ""')
+          if [[ "$has_dependabot_pr" == "true" || "$commit_author" == "dependabot[bot]" ]]; then
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          fi
+
   build-job:
     name: Build scheduler-plugin
     runs-on: ubuntu-latest
